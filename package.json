@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+  "build": "prisma generate && next build",
+  "postinstall": "prisma generate",
+  "start": "next start",
+  "lint": "eslint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -36,4 +37,5 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   }
+  
 }
