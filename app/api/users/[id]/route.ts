@@ -1,8 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { requireSessionUser } from "@/lib/auth";
 import { deleteUserById, updateUserRole } from "@/lib/store";
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+type RouteContext = { params: Promise<{ id: string }> };
+
+export async function PATCH(request: NextRequest, context: RouteContext) {
   const actor = await requireSessionUser();
   if (actor.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -15,7 +17,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { id } = params;
+  const { id } = await context.params;
 
   try {
     const payload = body as { role?: string };
@@ -30,13 +32,13 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, context: RouteContext) {
   const actor = await requireSessionUser();
   if (actor.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { id } = params;
+  const { id } = await context.params;
 
   try {
     const user = await deleteUserById(id, actor);

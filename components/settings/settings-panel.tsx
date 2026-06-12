@@ -198,7 +198,6 @@ export default function SettingsPanel({ initialSettings, initialProfile, initial
   function buildCompanyPayload(companyOverride?: Partial<WorkspaceSettingsFormValues["company"]>) {
     return {
       ...companyForm.getValues(),
-      logoUrl: companyLogo,
       ...companyOverride,
       logoUrl: companyOverride?.logoUrl ?? companyLogo,
     };
@@ -287,14 +286,13 @@ export default function SettingsPanel({ initialSettings, initialProfile, initial
   function buildSettingsPayload(overrides?: Partial<WorkspaceSettingsFormValues>): WorkspaceSettingsFormValues {
     const companyValues = buildCompanyPayload(overrides?.company);
     return {
+      ...overrides,
       profile: profileForm.getValues(),
       company: companyValues,
       security,
       notifications,
       inventoryRules,
       appearance: { themeMode, density, accent },
-      ...overrides,
-      company: companyValues,
     };
   }
 
