@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SIMS — Stock & Inventory Management System
 
-## Getting Started
+A full‑stack inventory and sales management web app built with Next.js. It provides user authentication, product and stock management, sales recording, and basic analytics — designed as a portfolio-ready project demonstrating modern web practices.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Authentication**: secure sign-in and role-aware access (admin / user)
+- **Product management**: create, update, and organize products and SKUs
+- **Inventory control**: track stock levels, restocking, and constraints
+- **Sales management**: create and record sales with linked inventory adjustments
+- **Analytics**: summary metrics and recent activity feed
+- **Admin UI**: settings, user management, and audit logs
+- **API routes**: server-side logic with typed inputs and validation
+- **Developer tooling**: seed scripts, database migrations, and local test helpers
+
+## Tech Stack
+
+- **Frontend**: Next.js (App Router) + React + TypeScript
+- **Backend**: Next.js API routes, Node.js server runtime
+- **Database & ORM**: Prisma with a relational database (Postgres recommended)
+- **Auth / Edge Services**: Supabase (client + admin helpers) and server-side session helpers
+- **Tooling**: ESLint, PostCSS, Vercel for deployment
+- **Other**: Utility scripts for seeding and DB checks (see `scripts/`)
+
+## Installation
+
+1. **Clone and install**
+   ```bash
+   git clone https://github.com/sison-kevin/sims.git
+   cd sims-portfolio
+   npm install
+   # or
+   yarn
+   ```
+
+2. **Setup environment**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+3. **Apply migrations and seed (Prisma)**
+   ```bash
+   npx prisma migrate dev --name init
+   node scripts/seed-demo.js
+   ```
+
+4. **Run development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+## Environment Variables
+
+Create `.env.local` with the keys your platform requires. Example entries:
+
+```
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
+NEXT_PUBLIC_SUPABASE_URL="https://xyz.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="anon-key"
+SUPABASE_SERVICE_ROLE_KEY="service-role-key"
+NEXTAUTH_SECRET="a-long-random-string"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Only include secrets in server-side environment settings (Vercel environment variables or server `.env`), never commit them.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Folder Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/` — Next.js routes (App Router), pages and nested layouts
+- `components/` — UI components and feature-specific compositions
+- `lib/` — helpers (auth, prisma client, formatting, utils)
+- `prisma/` — Prisma schema and migrations
+- `public/` — static assets
+- `scripts/` — helper scripts (seed, db checks)
+- `styles/` or `globals.css` — global styles and PostCSS config
 
-## Learn More
+## Usage / How it Works
 
-To learn more about Next.js, take a look at the following resources:
+- UI components in `app/` and `components/` render the frontend and call internal API routes.
+- API routes handle server logic, use `lib/prisma.ts` or Supabase helpers to access the database.
+- Authentication uses Supabase client for sign-in flows; sensitive operations are performed server-side.
+- Prisma manages schema and migrations; scripts seed demo data for local development.
+- The app follows common full‑stack patterns: typed requests, server-side data fetching, and component-driven UI.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vercel is an ideal host for this Next.js app:
 
-## Deploy on Vercel
+1. Connect the GitHub repo to Vercel
+2. Set environment variables (`DATABASE_URL`, Supabase keys) in the Vercel project settings
+3. Enable automatic deployments on push to `main`
+4. Run Prisma migrations (or enable a post-deploy migration step) and seed data as needed
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future Improvements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add end-to-end tests (Cypress / Playwright) and CI (GitHub Actions)
+- Role-based permissions and finer audit trails
+- Real-time inventory updates via WebSockets or Supabase Realtime
+- Improve accessibility and internationalization (i18n)
+- Add more analytics dashboards and exportable reports
+- Automated deployment scripts for DB migrations and seed
